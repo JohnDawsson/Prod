@@ -19,7 +19,8 @@ pipeline {
     }
     post {
         always {
-            junit 'target/surefire-reports/TEST-*.xml'
+            junit allowEmptyResults: true, testResults: "${WORKSPACE}/test-results/*.xml"
+
         }
         failure {
             sh 'echo "This is falure"'
