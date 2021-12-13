@@ -1,39 +1,28 @@
 pipeline {
-environment {
-    BRANCH_NAME = "${env.BRANCH_NAME}"
-}
-agent any
-stages{
-    stage('Build-Initiator-Info'){
-            steps{
-                sh 'echo "Send Info"'
+    agent any
+    stages {
+        stage('Compile') {
+            steps {
+                sh 'mvn clean package -DskipTests=true'
             }
-    }
-    stage('Build') {
-        steps{
-             catchError {
-                sh 'echo "This is build"'
-            }
-         }
-         post {
-            success {
-                echo 'Compile Stage Successful . . .'
-            }
-            failure {
-                echo 'Compile stage failed'
-                error('Stopping early…')
-
-             }
-    }
-   }
-  stage ('Deploy To Prod'){
-  input{
-    message "Do you want to proceed for production deployment?"
-  }
-    steps {
-                sh 'echo "Deploy into Prod"'
-
-              }
         }
-  }
-   }
+        stage('Unit Tests') {
+            steps {
+                sh 'mvn surefire:test'
+            }
+        }
+         stage('Integration Tests') {
+            steps {
+                sh 'mvn failsafe:integration-test'
+            }
+        }
+    }
+    post {
+        always {
+            junit 'target/surefire-reports/TEST-*.xml'
+        }
+        failure {
+            sh 'echo "This is falure"'
+        }
+    }
+}
