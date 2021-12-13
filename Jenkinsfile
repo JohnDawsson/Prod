@@ -17,7 +17,7 @@ stages{
          }
          post {
             always {
-            junit allowEmptyResults: true, testResults: "${WORKSPACE}/test-results/*.xml"
+            junit allowEmptyResults: false, testResults: "${WORKSPACE}/test-results/*.xml"
 
             } 
             success {
