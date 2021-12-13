@@ -17,7 +17,7 @@ stages{
          }
          post {
             always {
-            junit allowEmptyResults: true
+            junit allowEmptyResults: true, testResults: ""
 
             } 
             success {
