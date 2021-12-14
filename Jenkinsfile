@@ -16,10 +16,6 @@ stages{
             }
          }
          post {
-            always {
-            junit allowEmptyResults: true, testResults: null
-
-            } 
             success {
                 echo 'Compile Stage Successful . . .'
             }
